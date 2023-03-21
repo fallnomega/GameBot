@@ -1,34 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
 import time
 import re
 
 
-def find_max_item_to_buy(the_options):
+def find_max_item_to_buy(the_options,my_bank):
     name = []
     value = []
-    for x in my_choices:
-        if my_money >= float(x[1].replace(',', '')):
+    for x in the_options:
+        if my_bank >= float(x[1].replace(',', '')):
             name.append(x[0])
             value.append(int(x[1].replace(',', '')))
     max_value = max(value)
     max_location = value.index(max_value)
     return [name[max_location], value[max_location]]
-
-
-#
-# def get_names(the_options):
-#     name = []
-#     value = []
-#     the_upgrades = []
-#     for x in my_choices:
-#         if my_money >= float(x[1].replace(',', '')):
-#             name.append(x[0])
-#             value.append(int(x[1].replace(',', '')))
-#             the_upgrades.append(x[0],x[1])
-#     return
 
 options = Options()
 options.add_experimental_option("detach", True)
@@ -53,9 +39,7 @@ while keep_alive:
     my_money = driver.find_element(By.ID, 'money')
     my_money = my_money.text.replace(',','')
     my_money = int(my_money)
-    print(f"money available: {my_money}")
-    print(my_choices)
-    buying = find_max_item_to_buy(my_choices)
+    buying = find_max_item_to_buy(my_choices,my_money)
     get_upgrade = driver.find_element(By.ID, f'buy{buying[0]}')
     get_upgrade.click()
     sentinal += 1
