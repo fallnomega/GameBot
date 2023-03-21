@@ -24,25 +24,27 @@ chrome_driver = 'chromedriverDirectory'
 driver = webdriver.Chrome(executable_path=chrome_driver, options=options)
 driver.get('http://orteil.dashnet.org/experiments/cookie/')
 the_cookie = driver.find_element(By.ID, 'cookie')
-the_cookie.click()
-
-t_end = time.time() + 2
-while time.time() < t_end:
-    the_cookie.click()
-time.sleep(2)
-
-my_money = driver.find_element(By.ID, 'money')
-my_money = int(my_money.text)
-print(f"money available: {my_money}")
-
 buy_options = driver.find_element(By.ID, 'store')
 temp = buy_options.text.split('\n')
-
 selections = [re.split('\n.*\n', x) for x in temp]
 del selections[1::2]
 my_choices = [x[0].split(' - ') for x in selections]
-buying = find_max_item_to_buy(my_choices)
-print(buying)
-get_upgrade= driver.find_element(By.ID, f'buy{buying[0]}')
-get_upgrade.click()
 
+keep_alive = True
+sentinal = 0
+while keep_alive:
+    the_cookie.click()
+    t_end = time.time() + 5
+    while time.time() < t_end:
+        the_cookie.click()
+    time.sleep(2)
+    my_money = driver.find_element(By.ID, 'money')
+    my_money = int(my_money.text)
+    print(f"money available: {my_money}")
+    print(my_choices)
+    buying = find_max_item_to_buy(my_choices)
+    get_upgrade = driver.find_element(By.ID, f'buy{buying[0]}')
+    get_upgrade.click()
+    sentinal += 1
+    if sentinal >= 5:
+        keep_alive = False
