@@ -18,6 +18,18 @@ def find_max_item_to_buy(the_options):
     return [name[max_location], value[max_location]]
 
 
+#
+# def get_names(the_options):
+#     name = []
+#     value = []
+#     the_upgrades = []
+#     for x in my_choices:
+#         if my_money >= float(x[1].replace(',', '')):
+#             name.append(x[0])
+#             value.append(int(x[1].replace(',', '')))
+#             the_upgrades.append(x[0],x[1])
+#     return
+
 options = Options()
 options.add_experimental_option("detach", True)
 chrome_driver = 'chromedriverDirectory'
@@ -39,7 +51,8 @@ while keep_alive:
         the_cookie.click()
     time.sleep(2)
     my_money = driver.find_element(By.ID, 'money')
-    my_money = int(my_money.text)
+    my_money = my_money.text.replace(',','')
+    my_money = int(my_money)
     print(f"money available: {my_money}")
     print(my_choices)
     buying = find_max_item_to_buy(my_choices)
@@ -48,3 +61,6 @@ while keep_alive:
     sentinal += 1
     if sentinal >= 5:
         keep_alive = False
+time.sleep(2)
+cookies_per_second = driver.find_element(By.ID,'cps')
+print(f"cookies per second: {cookies_per_second.text}")
